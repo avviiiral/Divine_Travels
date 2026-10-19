@@ -36,43 +36,38 @@
     if (vehicleSelect) vehicleSelect.value = link.dataset.vehicle;
   }));
 
+  // This is a static-site booking flow: it opens WhatsApp with the enquiry details.
+  // No server, database, API key, or backend deployment is required.
   const form = document.getElementById('bookingForm');
   const result = document.getElementById('formResult');
   const submit = document.getElementById('submitBtn');
   if (form && result && submit) {
-    form.addEventListener('submit', async event => {
+    form.addEventListener('submit', event => {
       event.preventDefault();
-      result.className = 'form-result';
-      result.textContent = '';
-      submit.disabled = true;
-      submit.innerHTML = 'Sending request…';
+      if (!form.reportValidity()) return;
       const data = new FormData(form);
-      const payload = Object.fromEntries(data.entries());
-      payload.passengers = Number(payload.passengers || 1);
-      try {
-        const response = await fetch((window.DIVINE_API_BASE || '') + '/api/enquiries', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const body = await response.json().catch(() => ({}));
-        if (!response.ok || !body.ok) throw new Error(body.error || 'We could not submit your request. Please try again.');
-        result.className = 'form-result show success';
-        result.textContent = body.message || 'Your trip enquiry has been received. We will contact you to confirm details.';
-        form.reset();
-        if (tripType) tripType.value = 'One way';
-        document.querySelectorAll('.trip-tab').forEach(item => item.classList.toggle('active', item.dataset.trip === 'One way'));
-        if (dateInput) {
-          const now = new Date();
-          dateInput.min = [now.getFullYear(), String(now.getMonth() + 1).padStart(2, '0'), String(now.getDate()).padStart(2, '0')].join('-');
-        }
-      } catch (error) {
-        result.className = 'form-result show error';
-        result.textContent = error.message || 'Something went wrong. Please try again.';
-      } finally {
-        submit.disabled = false;
-        submit.innerHTML = 'Request a trip <span>↗</span>';
-      }
+      const fields = [
+        ['Name', data.get('fullName')],
+        ['Phone', data.get('phone')],
+        ['Email', data.get('email')],
+        ['Trip type', data.get('tripType')],
+        ['Pickup', data.get('pickup')],
+        ['Destination', data.get('destination')],
+        ['Travel date', data.get('travelDate')],
+        ['Pickup time', data.get('pickup_time')],
+        ['Return date', data.get('return_date')],
+        ['Vehicle', data.get('vehicle')],
+        ['Estimated distance (km)', data.get('estimated_km')],
+        ['Passengers', data.get('passengers')],
+        ['Package stops', data.getAll('package_stop').join(', ')],
+        ['Additional details', data.get('message')]
+      ].filter(([, value]) => value !== null && String(value).trim() !== '');
+      const message = 'Hello Divine Travels, I would like to enquire about a taxi booking.\n\n' +
+        fields.map(([label, value]) => label + ': ' + value).join('\n');
+      result.className = 'form-result show success';
+      result.textContent = 'WhatsApp is opening with your trip details. Please send the message there to complete your enquiry.';
+      const whatsappUrl = 'https://wa.me/919685366855?text=' + encodeURIComponent(message);
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
     });
   }
 })();
