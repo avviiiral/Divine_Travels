@@ -66,3 +66,5 @@
 .footer-credit a{color:#d6bd82;text-decoration:none;font-weight:600;text-underline-offset:3px}
 .footer-credit a:hover,.footer-credit a:focus-visible{text-decoration:underline}
 .footer-bottom{flex-wrap:wrap}
+/* Keep the footer credit clear of the floating WhatsApp button on small screens */
+@media(max-width:720px){.footer-credit{padding-bottom:72px}}

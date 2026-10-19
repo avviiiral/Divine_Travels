@@ -45,6 +45,8 @@
     form.addEventListener('submit', event => {
       event.preventDefault();
       if (!form.reportValidity()) return;
+      // Honeypot: real visitors never see or fill this field.
+      if (String(new FormData(form).get('website') || '').trim() !== '') return;
       const data = new FormData(form);
       const fields = [
         ['Name', data.get('fullName')],
