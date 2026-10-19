@@ -37,3 +37,25 @@
 .article-cta h2{color:#fff!important;margin-top:0!important}
 .article-cta p{color:#d2d9ce}
 @media(max-width:720px){.brand-logo{width:78px;height:62px}.footer-logo{width:92px;height:92px}.blog-card-grid{grid-template-columns:1fr}.blog-card-image{height:225px}.blog-card-body{padding:19px}.article-shell{padding:36px 0 65px}.article-content{font-size:14px}.article-content h2{font-size:25px}}
+
+/* Destination services and vehicle rates */
+.destination-services{background:#f4f1e9}
+.destination-service-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 24px;border-top:1px solid #dedfd7}
+.destination-service-list a{display:flex;justify-content:space-between;gap:12px;padding:16px 2px;border-bottom:1px solid #dedfd7;font-size:13px;font-weight:600;color:#293d30}
+.destination-service-list a span{color:#a17a35}
+.destination-service-list a:hover{color:#9a7533}
+.destination-service-note{font-size:12px;color:#72796e;margin:22px 0 0}
+.rates-section{background:#fff;padding:0 0 82px}
+.rates-section .section-heading{padding-top:12px}
+.rate-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.rate-card{border:1px solid #e6e4db;background:#faf9f5;padding:27px;display:flex;flex-direction:column;min-width:0}
+.rate-vehicle{font-size:9px;letter-spacing:.16em;color:#987331;font-weight:700}
+.rate-card h3{font-family:var(--display);font-size:20px;line-height:1.35;margin:15px 0}
+.rate-price{display:flex;align-items:baseline;gap:5px;border-bottom:1px solid #e3e1d8;padding-bottom:17px}
+.rate-price strong{font-family:var(--display);font-size:43px;letter-spacing:-.05em;color:#1d3328}
+.rate-price span{font-size:12px;color:#72796e}
+.rate-card p{font-size:12px;line-height:1.8;color:#72796e;margin:17px 0 23px}
+.rate-cta{margin-top:auto;padding-top:14px;border-top:1px solid #e3e1d8;font-size:11px;font-weight:700;color:#294331}
+.rates-note{font-size:11px;line-height:1.8;color:#777d72;margin:20px 0 0}
+@media(max-width:720px){.destination-service-list{grid-template-columns:1fr 1fr;gap:0 14px}.destination-service-list a{font-size:11px;padding:13px 0}.rate-grid{grid-template-columns:1fr}.rate-card{padding:23px}.rates-section{padding-bottom:55px}}
+@media(max-width:390px){.destination-service-list{grid-template-columns:1fr}}
