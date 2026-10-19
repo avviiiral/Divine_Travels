@@ -1,17 +1,20 @@
 # Booking email notifications (Vercel + Resend)
 
-The booking form keeps its existing fields and WhatsApp flow. It now also POSTs the form values to `/api/booking`, a Vercel serverless function that sends an email through Resend.
+The booking form keeps its existing fields and WhatsApp flow. It also POSTs the form values to `/api/booking`, a Vercel serverless function that sends an email through Resend.
 
-## Required setup
+## Free setup (no custom domain required for initial testing)
 
-1. Create/sign in to a Resend account at https://resend.com/.
-2. Add and verify a domain you control in Resend. Configure the DNS records Resend provides. A verified sender domain is needed to send to the booking inbox reliably; the Resend onboarding sender is for limited testing.
-3. In Resend, create an API key with the minimum permissions needed to send email.
-4. In Vercel, open the Divine Travels project → Settings → Environment Variables and add:
+1. Create a free Resend account at https://resend.com/ **using the notification inbox `divinetravels751@gmail.com`** and verify that email address.
+2. Create an API key in Resend.
+3. In Vercel, open the Divine Travels project → Settings → Environment Variables and add:
    - `RESEND_API_KEY`: the secret API key from Resend.
-   - `RESEND_FROM_EMAIL`: a sender on your verified domain, e.g. `Divine Travels <bookings@your-verified-domain.example>`. Replace the example with a real verified sender address.
-5. Enable the variables for Production (and Preview if you intend to test previews), save, then redeploy the latest deployment so the function receives them.
-6. Test a booking using a real set of details. Confirm an email arrives at `divinetravels751@gmail.com` and that WhatsApp opens with the same trip details. Check Resend's email logs if delivery fails.
+   - `RESEND_FROM_EMAIL`: optional for this initial test. If omitted, the function uses `Divine Travels <onboarding@resend.dev>`.
+4. Enable `RESEND_API_KEY` for Production (and Preview if you intend to test previews), save, then redeploy so the function receives it.
+5. Submit a real test enquiry. Confirm an email arrives at `divinetravels751@gmail.com` and that WhatsApp opens with the same trip details.
+
+**Important Resend test-mode restriction:** the `onboarding@resend.dev` sender can send only to the email address associated with your Resend account. That is why the account should be registered to `divinetravels751@gmail.com` for this no-domain setup. If the recipient must differ from the Resend account email, or you want a branded sender for broader production use, add and verify a domain you control in Resend and set `RESEND_FROM_EMAIL` to an address on that verified domain.
+
+Resend currently lists a free plan with up to 3,000 emails per month and a daily limit of 100; check its [current pricing](https://resend.com/pricing) for any changes or conditions.
 
 Do not put the Resend API key in `public/config.js`, frontend JavaScript, HTML, or Git. The API key is only read by the server-side function.
 
