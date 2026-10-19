@@ -31,6 +31,11 @@
     if (tripType) tripType.value = tab.dataset.trip || 'One way';
   }));
 
+  document.querySelectorAll('.rate-cta[data-vehicle]').forEach(link => link.addEventListener('click', () => {
+    const vehicleSelect = document.querySelector('select[name="vehicle"]');
+    if (vehicleSelect) vehicleSelect.value = link.dataset.vehicle;
+  }));
+
   const form = document.getElementById('bookingForm');
   const result = document.getElementById('formResult');
   const submit = document.getElementById('submitBtn');
