@@ -67,13 +67,13 @@
         ['Additional details', data.get('message')]
       ].filter(([, value]) => value !== null && String(value).trim() !== '');
 
-      const message = 'Hello Divine Travels, I would like to enquire about a taxi booking.\\n\\n' +
-        fields.map(([label, value]) => label + ': ' + value).join('\\n');
+      const message = 'Hello Divine Travels, I would like to enquire about a taxi booking.\n\n' +
+        fields.map(([label, value]) => label + ': ' + value).join('\n');
       const whatsappUrl = 'https://wa.me/919685366855?text=' + encodeURIComponent(message);
 
       // Open synchronously within the click gesture so popup blockers do not
       // block WhatsApp while the email request is in progress.
-      const whatsappWindow = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
       result.className = 'form-result show';
       result.textContent = 'Sending your enquiry by email… WhatsApp should open with your trip details.';
       submit.disabled = true;
