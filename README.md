@@ -52,7 +52,18 @@ Open http://127.0.0.1:5500/.
 
 ### Before launch: set your canonical domain
 
-The current SEO metadata and sitemap contain the previous Hatchable domain. After deploying, replace `https://divine-travels.hatchable.site` in `public/index.html`, `public/blog.html`, the three blog articles, `public/robots.txt`, and `public/sitemap.xml` with your final Netlify/Vercel custom domain. Keep each canonical URL unique and aligned with the actual public page URL. Then submit `https://YOUR-DOMAIN/sitemap.xml` in Google Search Console.
+The pages still carry the previous Hatchable domain until you apply your own. Do **not** deploy for public use before this step, because a canonical pointing at another domain tells Google to index that domain instead of yours.
+
+```powershell
+python scripts/set_domain.py https://YOUR-DOMAIN     # canonical, og:url/og:image, JSON-LD, sitemap.xml, robots.txt
+python scripts/check_seo.py                          # must finish with 0 error(s)
+```
+
+`set_domain.py` rejects the old Hatchable domain and the developer portfolio domain, and is safe to re-run. `check_seo.py` also checks titles, descriptions, duplicate pages, structured data, sitemap/robots, broken links and missing images. Then deploy, and:
+
+1. Add the site to Google Search Console and Bing Webmaster Tools, and submit `https://YOUR-DOMAIN/sitemap.xml`.
+2. Create or claim the Google Business Profile with the same business name, address and phone number as the website (the biggest lever for "taxi in Ujjain" style searches).
+3. Add the office address to the Contact section and the `LocalBusiness` JSON-LD once confirmed.
 
 Only publish service areas, rates, reviews and travel claims that are accurate. SEO improvements cannot guarantee a particular ranking.
 

@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-Disallow: /admin.html
 Sitemap: https://divine-travels.hatchable.site/sitemap.xml
