@@ -1,2 +1,3 @@
-// Leave empty to use the current site's API. Set to your deployed Django API origin to switch backends, e.g. https://api.example.com
+// Static deployment: booking enquiries are sent directly to WhatsApp from public/app.js.
+// No API server or environment-specific API URL is required.
 window.DIVINE_API_BASE = '';
