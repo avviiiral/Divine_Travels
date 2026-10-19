@@ -5,7 +5,7 @@ const MAX_FIELD_LENGTH = 1000;
 
 function clean(value, max = 180) {
   if (typeof value !== "string") return "";
-  return value.replace(/[\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F\\u007F]/g, "").trim().slice(0, max);
+  return value.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "").trim().slice(0, max);
 }
 
 function escapeHtml(value) {
@@ -83,13 +83,13 @@ export default async function handler(req, res) {
   if (!fullName || !phone || !pickup || !destination) {
     return res.status(400).json({ error: "Name, phone, pickup and destination are required." });
   }
-  if (!/^[+0-9()\\s.-]{7,30}$/.test(phone)) {
+  if (!/^[+0-9()\s.-]{7,30}$/.test(phone)) {
     return res.status(400).json({ error: "Enter a valid phone number." });
   }
-  if (email && !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
+  if (email && !/^[^\s@]+@[^\s@]+\\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: "Enter a valid email address." });
   }
-  if (travelDate && !/^\\d{4}-\\d{2}-\\d{2}$/.test(travelDate)) {
+  if (travelDate && !/^\d{4}-\d{2}-\d{2}$/.test(travelDate)) {
     return res.status(400).json({ error: "Travel date must use YYYY-MM-DD." });
   }
 
@@ -115,7 +115,7 @@ export default async function handler(req, res) {
     ...rows.map(([label, value]) => label + ": " + value),
     "",
     "This is an enquiry, not a confirmed booking."
-  ].join("\\n");
+  ].join("\n");
   const html = `<h2>New Divine Travels trip enquiry</h2><table cellpadding="6" cellspacing="0" border="0">${rows.map(([label, value]) => `<tr><th align="left" valign="top">${escapeHtml(label)}</th><td>${escapeHtml(value)}</td></tr>`).join("")}</table><p>This is an enquiry, not a confirmed booking.</p>`;
 
   const apiKey = process.env.RESEND_API_KEY;
