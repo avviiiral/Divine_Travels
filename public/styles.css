@@ -59,3 +59,10 @@
 .rates-note{font-size:11px;line-height:1.8;color:#777d72;margin:20px 0 0}
 @media(max-width:720px){.destination-service-list{grid-template-columns:1fr 1fr;gap:0 14px}.destination-service-list a{font-size:11px;padding:13px 0}.rate-grid{grid-template-columns:1fr}.rate-card{padding:23px}.rates-section{padding-bottom:55px}}
 @media(max-width:390px){.destination-service-list{grid-template-columns:1fr}}
+
+
+/* Developer credit in the site footer */
+.footer-credit{flex-basis:100%;text-align:center;margin:12px 0 0;font-size:11px;color:#aeb8ad;line-height:1.8}
+.footer-credit a{color:#d6bd82;text-decoration:none;font-weight:600;text-underline-offset:3px}
+.footer-credit a:hover,.footer-credit a:focus-visible{text-decoration:underline}
+.footer-bottom{flex-wrap:wrap}
