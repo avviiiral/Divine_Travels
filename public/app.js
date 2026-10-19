@@ -36,18 +36,20 @@
     if (vehicleSelect) vehicleSelect.value = link.dataset.vehicle;
   }));
 
-  // This is a static-site booking flow: it opens WhatsApp with the enquiry details.
-  // No server, database, API key, or backend deployment is required.
+  // Booking enquiries are emailed through the Vercel serverless endpoint and
+  // WhatsApp opens with the same details. Email secrets stay server-side.
   const form = document.getElementById('bookingForm');
   const result = document.getElementById('formResult');
   const submit = document.getElementById('submitBtn');
   if (form && result && submit) {
-    form.addEventListener('submit', event => {
+    form.addEventListener('submit', async event => {
       event.preventDefault();
       if (!form.reportValidity()) return;
-      // Honeypot: real visitors never see or fill this field.
-      if (String(new FormData(form).get('website') || '').trim() !== '') return;
+
       const data = new FormData(form);
+      // Honeypot: real visitors never see or fill this field.
+      if (String(data.get('website') || '').trim() !== '') return;
+
       const fields = [
         ['Name', data.get('fullName')],
         ['Phone', data.get('phone')],
@@ -64,12 +66,38 @@
         ['Package stops', data.getAll('package_stop').join(', ')],
         ['Additional details', data.get('message')]
       ].filter(([, value]) => value !== null && String(value).trim() !== '');
-      const message = 'Hello Divine Travels, I would like to enquire about a taxi booking.\n\n' +
-        fields.map(([label, value]) => label + ': ' + value).join('\n');
-      result.className = 'form-result show success';
-      result.textContent = 'WhatsApp is opening with your trip details. Please send the message there to complete your enquiry.';
+
+      const message = 'Hello Divine Travels, I would like to enquire about a taxi booking.\\n\\n' +
+        fields.map(([label, value]) => label + ': ' + value).join('\\n');
       const whatsappUrl = 'https://wa.me/919685366855?text=' + encodeURIComponent(message);
-      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+
+      // Open synchronously within the click gesture so popup blockers do not
+      // block WhatsApp while the email request is in progress.
+      const whatsappWindow = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+      result.className = 'form-result show';
+      result.textContent = 'Sending your enquiry by email… WhatsApp should open with your trip details.';
+      submit.disabled = true;
+
+      const payload = Object.fromEntries(data.entries());
+      payload.package_stop = data.getAll('package_stop');
+
+      try {
+        const response = await fetch('/api/booking', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const body = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(body.error || 'Email delivery could not be confirmed.');
+
+        result.className = 'form-result show success';
+        result.textContent = 'Enquiry emailed to Divine Travels. WhatsApp is open with your trip details—please press Send there to also submit it by WhatsApp.';
+      } catch (error) {
+        result.className = 'form-result show';
+        result.textContent = 'WhatsApp is open with your trip details. Email notification could not be sent; please send the WhatsApp message or call +91 96853 66855.';
+      } finally {
+        submit.disabled = false;
+      }
     });
   }
 })();
