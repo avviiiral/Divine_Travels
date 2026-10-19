@@ -1,42 +1,62 @@
-# Divine Travels Website
+# Divine Travels — Static Taxi Website
 
-Local taxi booking website for Divine Travels, focused on customers searching for taxi and cab services in **Ujjain, Indore, Dewas, Bhopal, and nearby towns and villages in Madhya Pradesh**.
+A lightweight, responsive taxi-service website for Divine Travels, focused on taxi searches in **Ujjain, Indore, Dewas, Bhopal and nearby places in Madhya Pradesh**.
 
-## Services
-- Local city taxi
-- One-way and intercity cab
-- Outstation trips
-- Round trips
-- Local rentals
-- Airport transfers
-- WhatsApp and phone enquiries
+## Static deployment — no backend required
 
-## Contact
-- Phone / WhatsApp: +91 96853 66855
-- Service area: Ujjain, Indore, Dewas, Bhopal and nearby cities, towns and villages
+This branch intentionally removes Django, database migrations, API handlers and the enquiry admin panel. It can be deployed as a static website to **Netlify or Vercel** without a Python runtime or database.
 
-## Project structure
-- `public/index.html`: responsive marketing and booking page, local service content, FAQ, structured data
-- `public/styles.css`, `public/seo-local.css`: visual styling and local SEO section styling
-- `public/app.js`: booking form and site navigation interactions
-- `public/config.js`: API base configuration for hosted JavaScript endpoints or a future Django API
-- `public/admin.html`, `public/admin.js`, `public/admin.css`: trip enquiry dashboard (API route is access-gated by the hosting platform)
-- `api/enquiries.js`: trip enquiry creation endpoint for the current Hatchable deployment
-- `api/admin/enquiries.js`: admin-only enquiry management endpoint
-- `migrations/0001_trip_enquiries.sql`: database schema for trip enquiries
-- `public/robots.txt`, `public/sitemap.xml`: search crawler instructions and sitemap
+### Booking flow
 
-## Local preview
-The `public` directory can be served as a static site for visual preview:
+The booking form validates the visitor's details in the browser and opens WhatsApp with a prefilled trip enquiry to **+91 96853 66855**. The customer must press Send in WhatsApp to submit the enquiry. This static version does not store enquiries in a website database and does not include a private admin dashboard.
 
-```bash
-python -m http.server 8000 --directory public
+### Deploy to Netlify
+
+1. Push this branch to GitHub and import the repository into Netlify.
+2. Set the branch to `feature/static-seo-netlify-blog` (or merge it into `main` first).
+3. Build command: leave blank.
+4. Publish directory: `public`.
+5. Deploy the site.
+
+The `netlify.toml` file sets the publish directory.
+
+### Deploy to Vercel
+
+1. Import the repository into Vercel.
+2. Set the production branch to this branch or merge it into `main`.
+3. Set the output directory to `public`; no build command is required.
+4. Deploy.
+
+The `vercel.json` file configures static output.
+
+### Local preview
+
+From the repository root:
+
+```powershell
+python -m http.server 5500 --directory public
 ```
 
-Booking submission uses the deployed API by default. For a standalone local preview, configure `window.DIVINE_API_BASE` to the backend URL. The deployed website currently uses Hatchable's JavaScript API and PostgreSQL. The Django/DRF backend prepared separately must be deployed to a Python-capable host and configured before switching the form over to Django.
+Open http://127.0.0.1:5500/.
 
-## Local SEO notes
-The page title, meta description, content headings, FAQs and `TaxiService` JSON-LD target local services and locations. Only claim routes/availability that Divine Travels actually serves. Update the sitemap's canonical URL when a custom domain is connected, then submit it in Google Search Console. Local SEO work does not guarantee any particular search ranking.
+## SEO and content
 
-## Deployment
-This repository contains site source. The live website is currently hosted separately at https://divine-travels.hatchable.site. The hosting project may remain private until the owner changes visibility to Public. GitHub repository visibility and website-hosting visibility are separate settings.
+- Local service title and meta description targeting taxi service in Ujjain, Indore, Dewas and Bhopal.
+- TaxiService structured data, contact details and service-area content.
+- Blog index at `/blog.html`.
+- Static travel guides:
+  - `/blog/mahakaleshwar-darshan-guide.html`
+  - `/blog/ujjain-to-omkareshwar.html`
+  - `/blog/maheshwar-mandu-itinerary.html`
+- `public/robots.txt` and `public/sitemap.xml` for search crawlers.
+
+### Before launch: set your canonical domain
+
+The current SEO metadata and sitemap contain the previous Hatchable domain. After deploying, replace `https://divine-travels.hatchable.site` in `public/index.html`, `public/blog.html`, the three blog articles, `public/robots.txt`, and `public/sitemap.xml` with your final Netlify/Vercel custom domain. Keep each canonical URL unique and aligned with the actual public page URL. Then submit `https://YOUR-DOMAIN/sitemap.xml` in Google Search Console.
+
+Only publish service areas, rates, reviews and travel claims that are accurate. SEO improvements cannot guarantee a particular ranking.
+
+## Contact
+
+- Phone / WhatsApp: +91 96853 66855
+- Service area: Ujjain, Indore, Dewas, Bhopal and nearby cities, towns and villages.
